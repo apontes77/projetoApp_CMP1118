@@ -14,12 +14,17 @@
    # Protótipos, Interfaces
     
    A seguir, segue-se uma ideia de tela de login para aplicação - ainda faltam diversos componentes. 
-    
-<p align="center>
-          <img width="460" height="300" src="https://github.com/apontes77/projetoApp_CMP1118/blob/master/prototipos/PrototipoLogin/Login.png">
+
+
+<p align="center">
+          <img  src="https://github.com/apontes77/projetoApp_CMP1118/blob/master/prototipos/PrototipoLogin/Login.png">
 </p>
+
+
    E ainda, a seguir temos um esquema de protótipos de processos internos de rotas do aplicativo:
-<p align="center>
-          <img width="460" height="300" src="https://github.com/apontes77/projetoApp_CMP1118/blob/master/prototipos/PrototipoChat/Lista%20Chat.png">
+
+
+<p align="center">
+          <img src="https://github.com/apontes77/projetoApp_CMP1118/blob/master/prototipos/PrototipoChat/Lista%20Chat.png">
 </p>
  
