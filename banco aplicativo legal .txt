@@ -1,0 +1,178 @@
+create table pessoa(
+  id_pessoa SERIAL PRIMARY KEY,
+  nome VARCHAR(255),
+  cpf VARCHAR(11),
+  email VARCHAR(255),
+  senha VARCHAR(255),
+  data_nascimento integer,
+  celular integer,
+  imagem_perfil OID
+);
+create table endereco(
+  id_endereco SERIAL PRIMARY KEY,
+  fk_pessoa  integer NOT NULL,
+  estado VARCHAR(255),
+  cidade VARCHAR(255),
+  cep VARCHAR(8),
+  rua VARCHAR(255),
+  numero integer,
+  bairro VARCHAR(255),
+  complemento VARCHAR(255),
+  FOREIGN KEY (fk_pessoa) REFERENCES pessoa(id_pessoa)
+ );
+  
+create table dias(
+  id_dias SERIAL PRIMARY KEY,
+  nome_dias VARCHAR(255)
+);
+
+create table pessoa_endereco(
+  id_pessoa_endereço SERIAL PRIMARY KEY,
+  fk_pessoa  integer NOT NULL,
+  fk_endereco integer NOT NULL,
+  FOREIGN KEY (fk_pessoa) REFERENCES pessoa(id_pessoa),
+  FOREIGN KEY (fk_endereco) REFERENCES endereco(id_endereco)
+);
+
+create table cartao(
+  id_cartao SERIAL PRIMARY KEY,
+  numero_cartao VARCHAR(16),
+  nome_dono_cartao VARCHAR(255),
+  bandeira VARCHAR(255),
+  validade VARCHAR(5) 
+);
+ 
+create table forma_receber(
+  id_forma_receber SERIAL PRIMARY KEY,
+  nome_banco VARCHAR(255),
+  agencia VARCHAR(255),
+  conta VARCHAR(255)
+);
+
+create table cartao_pessoa(
+  id_cartao_pessoa SERIAL PRIMARY KEY,
+  fk_cartao integer NOT NULL,
+  fk_pessoa integer NOT NULL,
+  FOREIGN KEY (fk_cartao) REFERENCES cartao(id_cartao),
+  FOREIGN KEY (fk_pessoa) REFERENCES pessoa(id_pessoa)
+);
+
+create table boleto(
+  id_boleto SERIAL PRIMARY KEY,
+  codigobarra VARCHAR(255),
+  datavencimento VARCHAR(11),
+  valor FLOAT(10),
+  nosso_numero integer,
+  instrucoes_caixa VARCHAR(255),
+  codigo_banco integer,
+  carteira integer,
+  data_documento VARCHAR(11),
+  beneficiario VARCHAR(255),
+  pagador integer NOT NULL,
+  FOREIGN KEY (pagador) REFERENCES pessoa(id_pessoa)
+);
+
+create table categoria_servico(
+  id_categoria SERIAL PRIMARY KEY,
+  nome_categoria VARCHAR(255)
+);
+
+create table tipo_servico(
+  id_tipo SERIAL PRIMARY KEY,
+  nome_tipo VARCHAR(255),
+  fk_categoria_servico integer NOT NULL,
+ FOREIGN KEY (fk_categoria_servico) REFERENCES categoria_servico(id_categoria)
+);
+
+create table colaborador(
+  id_colaborador SERIAL PRIMARY KEY,
+  fk_pessoa integer NOT NULL,
+  fk_forma_receber integer NOT NULL,
+  FOREIGN KEY (fk_pessoa) REFERENCES pessoa(id_pessoa),
+  FOREIGN KEY (fk_forma_receber) REFERENCES forma_receber(id_forma_receber)
+);
+
+create table servico(
+  id_servico SERIAL PRIMARY KEY,
+  fk_colaborador integer NOT NULL,
+  fk_tipo integer NOT NULL,
+  nome_servico VARCHAR(255),
+  descricao VARCHAR(255),
+  preco FLOAT(10),
+  apartirde BOOL,
+  imagem_servico OID,
+  avaliacao FLOAT(10),
+  FOREIGN KEY (fk_colaborador) REFERENCES colaborador(id_colaborador),
+  FOREIGN KEY (fk_tipo) REFERENCES tipo_servico(id_tipo)
+);
+
+create table servico_dias(
+  id_servico_dias SERIAL PRIMARY KEY,
+  fk_dias integer NOT NULL,
+  fk_servico integer NOT NULL,
+  FOREIGN KEY (fk_dias) REFERENCES dias(id_dias),
+  FOREIGN KEY (fk_servico) REFERENCES servico(id_servico)
+);
+
+create table cliente(
+  id_cliente SERIAL PRIMARY KEY,
+  fk_pessoa integer NOT NULL,
+  avaliaçao FLOAT(10),
+  FOREIGN KEY (fk_pessoa) REFERENCES pessoa(id_pessoa)
+);
+
+create table cliente_servico(
+  id_cliente_servico SERIAL PRIMARY KEY,
+  fk_cliente integer NOT NULL,
+  fk_servico integer NOT NULL,
+  fk_boleto integer NOT NULL,
+  preco FLOAT(10),
+  ativo OID,
+  FOREIGN KEY (fk_cliente) REFERENCES cliente(id_cliente),
+  FOREIGN KEY (fk_servico) REFERENCES servico(id_servico),
+  FOREIGN KEY (fk_boleto) REFERENCES boleto(id_boleto)
+);
+
+create table data_servico(
+  id_data_servico SERIAL PRIMARY KEY,
+  fk_cliente_servico integer NOT NULL,
+  data_ VARCHAR(11),
+  FOREIGN KEY (fk_cliente_servico) REFERENCES cliente_servico(id_cliente_servico)
+);
+
+create table estado(
+  id_estado SERIAL PRIMARY KEY,
+  nome_estado VARCHAR(255)
+);
+
+create table cidade(
+  id_cidade SERIAL PRIMARY KEY,
+  nome_cidade VARCHAR(255),
+  fk_estado integer NOT NULL,
+  FOREIGN KEY (fk_estado) REFERENCES estado(id_estado)
+);
+
+create table area_etendimento(
+  id_area_etendimento SERIAL PRIMARY KEY,
+  fk_colaborador integer NOT NULL,
+  fk_cidade integer NOT NULL,
+  FOREIGN KEY (fk_colaborador) REFERENCES colaborador(id_colaborador),
+  FOREIGN KEY (fk_cidade) REFERENCES cidade(id_cidade)
+);
+
+create table destaque(
+  id_destaque SERIAL PRIMARY KEY,
+  preco FLOAT(10),
+  duracao_dias integer
+);
+create table destaque_servico(
+  id_destaque_servico SERIAL PRIMARY KEY,  
+  fk_destaque integer NOT NULL,
+  fk_servico integer NOT NULL,
+  fk_boleto integer NOT NULL,
+  data_inicio VARCHAR(11),
+  data_fim VARCHAR(11),
+  FOREIGN KEY (fk_destaque) REFERENCES destaque(id_destaque),
+  FOREIGN KEY (fk_servico) REFERENCES servico(id_servico),
+  FOREIGN KEY (fk_boleto) REFERENCES boleto(id_boleto)
+);
